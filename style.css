@@ -1,0 +1,94 @@
+@import 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap';
+*,
+:after,
+:before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-color: #e9ecef;
+  font-family: Roboto, sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.calc__container {
+  max-width: 40rem;
+  border-radius: 10px;
+  margin: 5rem auto 0;
+  overflow: hidden;
+  box-shadow: 0 0 16px #11111a1a;
+}
+
+.calc__input {
+  height: 12rem;
+  text-align: right;
+  background-color: #000;
+  padding: 1rem 2rem;
+}
+
+.calc__previous-operand {
+  color: #ccc;
+  margin-bottom: 1.6rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.calc__current-operand {
+  color: #fff;
+  font-size: 3rem;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.calc__output {
+  background-color: #e9ecef;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+  display: grid;
+}
+
+[data-reset] {
+  grid-column: 1 / span 2;
+}
+
+[data-equals] {
+  background-color: #ae3ec9;
+  grid-column: 3 / span 2;
+}
+
+[data-equals]:hover {
+  background-color: #be4bdb;
+}
+
+[data-delete],
+[data-reset] {
+  background-color: #ced4da;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: #212529;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 5px;
+  padding: 1.25rem 1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px #63636333;
+}
+
+button:hover {
+  background-color: #e9ecef;
+}
+
+/*# sourceMappingURL=index.8353e49f.css.map */
