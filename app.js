@@ -21,6 +21,13 @@ const state = {
   temp: undefined,
   deleteBtnWasClicked: false,
 };
+const isValidOperation = function (ope) {
+  if (ope === '+') return true;
+  if (ope === '-') return true;
+  if (ope === '/') return true;
+  if (ope === '*') return true;
+  return false;
+};
 const updatePrevOperandLabel = function (val, addToCurText = true) {
   if (addToCurText) prevOperandLabel.textContent += val;
   else prevOperandLabel.textContent = val;
@@ -29,8 +36,6 @@ const updateCurrOperandLabel = function (val, addToCurText = true) {
   if (addToCurText) {
     currOperandLabel.textContent += val;
   } else currOperandLabel.textContent = val.toLocaleString();
-  // if (addToCurText) currOperandLabel.textContent += val;
-  // else currOperandLabel.textContent = val;
 };
 const operate = function (nbr1, nbr2, ope) {
   if (ope === '+') return add(+nbr1, +nbr2);
@@ -51,17 +56,16 @@ const devide = function (nbr1, nbr2) {
   return +(nbr1 / nbr2).toFixed(4);
 };
 // Number click handler
-const handlerNumberClicked = function (e) {
-  console.log(state);
+const handlerNumberClicked = function (nbr) {
   state.euqalBtnWasClicked = false;
   if (
     state.numberContainDot &&
-    e.target.dataset.nbr === '.' &&
+    nbr.dataset.nbr === '.' &&
     currOperandLabel.textContent.includes('.')
   )
     return;
-  updateCurrOperandLabel(e.target.dataset.nbr, !state.overrideCurrVal);
-  // if (state.overrideCurrVal) state.currVal = e.target.dataset.nbr;
+  updateCurrOperandLabel(nbr.dataset.nbr, !state.overrideCurrVal);
+  // if (state.overrideCurrVal) state.currVal = nbr.dataset.nbr;
   // When the equal btn was clicked and there were no previos operation
   if (state.overridePrevOperandLable && !state.currOpe) {
     prevOperandLabel.innerHTML = '&nbsp;';
@@ -72,22 +76,19 @@ const handlerNumberClicked = function (e) {
       state.prevVal = state.currVal;
     }
     state.prevOpe = state.currOpe;
-    state.currVal = e.target.dataset.nbr;
+    state.currVal = nbr.dataset.nbr;
   }
-  if (!state.overrideCurrVal) state.currVal += e.target.dataset.nbr;
-  if (e.target.dataset.nbr === '.') state.numberContainDot = true;
+  if (!state.overrideCurrVal) state.currVal += nbr.dataset.nbr;
+  if (nbr.dataset.nbr === '.') state.numberContainDot = true;
   state.overrideCurrVal = false;
 };
 // Operation click handler
-const handlerOperationClicked = function (e) {
-  // if (!state.currOpe && !state.prevVal && state.euqalBtnWasClicked) return;
-  console.log(state);
-
+const handlerOperationClicked = function (operation) {
   state.euqalBtnWasClicked = false;
   state.deleteBtnWasClicked = false;
   // If there is no current value the user won't be able to click an operation
   if (!state.currVal) return;
-  state.currOpe = e.target.dataset.ope;
+  state.currOpe = operation.dataset.ope;
   state.overrideCurrVal = true;
   state.numberContainDot = false;
   if (state.prevVal && state.prevOpe) {
@@ -99,7 +100,7 @@ const handlerOperationClicked = function (e) {
   updatePrevOperandLabel(`${state.currVal}${state.currOpe}`, false);
 };
 // Equal click handler
-const hadnlerEqualClicked = function (e) {
+const hadnlerEqualClicked = function () {
   state.deleteBtnWasClicked = false;
   if (!state.currOpe) return;
   if (!state.prevVal && state.prevVal != 0) return;
@@ -119,7 +120,7 @@ const hadnlerEqualClicked = function (e) {
   state.numberContainDot = false;
 };
 // Delete click handler
-const handlerDeleteClicked = function (e) {
+const handlerDeleteClicked = function () {
   state.deleteBtnWasClicked = true;
   if (!state.prevVal) state.prevVal = state.currVal;
   if (state.euqalBtnWasClicked) {
@@ -162,11 +163,26 @@ function init() {
   deleteBtn.addEventListener('click', handlerDeleteClicked);
   // add event listeners to numbers
   numbersButtons.forEach(numberBtn =>
-    numberBtn.addEventListener('click', handlerNumberClicked)
+    numberBtn.addEventListener('click', e => handlerNumberClicked(e.target))
   );
   // add evetn listeners to operation
   operationsButtons.forEach(opeBtn =>
-    opeBtn.addEventListener('click', handlerOperationClicked)
+    opeBtn.addEventListener('click', e => handlerOperationClicked(e.target))
   );
+  document.addEventListener('keydown', e => {
+    console.log(e.key);
+    if (e.key === 'Backspace') handlerDeleteClicked();
+    if (!isNaN(e.key) || e.key === '.')
+      handlerNumberClicked(document.querySelector(`[data-nbr="${e.key}"]`));
+    if (e.key === 'Enter') hadnlerEqualClicked();
+    if (isValidOperation(e.key)) {
+      if (e.key === '/')
+        handlerOperationClicked(document.querySelector('[data-ope="÷"]'));
+      else
+        handlerOperationClicked(
+          document.querySelector(`[data-ope="${e.key}"]`)
+        );
+    }
+  });
 }
 init();
