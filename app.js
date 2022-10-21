@@ -67,7 +67,6 @@ const handlerNumberClicked = function (e) {
     prevOperandLabel.innerHTML = '&nbsp;';
     state.overridePrevOperandLable = false;
   }
-  // if (state.currVal == 0) updateCurrOperandLabel('', false);
   if (state.overrideCurrVal) {
     if (!state.deleteBtnWasClicked) {
       state.prevVal = state.currVal;
@@ -77,11 +76,7 @@ const handlerNumberClicked = function (e) {
   }
   if (!state.overrideCurrVal) state.currVal += e.target.dataset.nbr;
   if (e.target.dataset.nbr === '.') state.numberContainDot = true;
-  // state.overrideCurrOperandLabel = false;
   state.overrideCurrVal = false;
-  // *
-  // state.prevOpe = state.currOpe;
-  // *
 };
 // Operation click handler
 const handlerOperationClicked = function (e) {
@@ -93,7 +88,6 @@ const handlerOperationClicked = function (e) {
   // If there is no current value the user won't be able to click an operation
   if (!state.currVal) return;
   state.currOpe = e.target.dataset.ope;
-  // state.overrideCurrOperandLabel = true;
   state.overrideCurrVal = true;
   state.numberContainDot = false;
   if (state.prevVal && state.prevOpe) {
@@ -106,11 +100,8 @@ const handlerOperationClicked = function (e) {
 };
 // Equal click handler
 const hadnlerEqualClicked = function (e) {
-  console.log(state);
-
   state.deleteBtnWasClicked = false;
   if (!state.currOpe) return;
-  // if (!state.currVal && !state.prevVal) return;
   if (!state.prevVal && state.prevVal != 0) return;
   state.euqalBtnWasClicked = true;
   state.result = operate(state.prevVal, state.currVal, state.currOpe);
@@ -123,15 +114,12 @@ const hadnlerEqualClicked = function (e) {
   state.prevVal = undefined;
   state.currVal = state.result;
   state.overrideCurrVal = true;
-  //
   state.currOpe = undefined;
   state.overridePrevOperandLable = true;
   state.numberContainDot = false;
 };
 // Delete click handler
 const handlerDeleteClicked = function (e) {
-  console.log(state);
-
   state.deleteBtnWasClicked = true;
   if (!state.prevVal) state.prevVal = state.currVal;
   if (state.euqalBtnWasClicked) {
@@ -140,9 +128,6 @@ const handlerDeleteClicked = function (e) {
   }
   const curVal = state.currVal.toString();
   state.currVal = curVal.length > 1 ? curVal.slice(0, -1) : 0;
-  if (state.currVal == 0) {
-    // state.overrideCurrVal = true;
-  }
   if (!state.currOpe) prevOperandLabel.innerHTML = '&nbsp';
   updateCurrOperandLabel(state.currVal, false);
 };
